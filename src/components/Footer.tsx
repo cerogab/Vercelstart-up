@@ -41,7 +41,13 @@ export function Footer() {
             © 2026 Bram App. All rights reserved.
           </p>
           <div className="flex space-x-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a>
+            <a
+              href="https://www.iubenda.com/privacy-policy/95097773"
+              className="iubenda-white iubenda-noiframe iubenda-embed hover:text-foreground transition-colors"
+              title="Privacy Policy"
+            >
+              Privacy Policy
+            </a>
             <a href="#" className="hover:text-foreground transition-colors">Terms of Service</a>
           </div>
         </div>

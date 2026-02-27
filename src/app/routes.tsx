@@ -6,8 +6,6 @@ import { PricingPage } from "../pages/PricingPage";
 import { ChangelogPage } from "../pages/ChangelogPage";
 import { WatchDemoPage } from "../pages/WatchDemoPage";
 import { GetStartedPage } from "../pages/GetStartedPage";
-import { CheckoutSuccessPage } from "../pages/CheckoutSuccessPage";
-import { CheckoutCancelPage } from "../pages/CheckoutCancelPage";
 
 export const router = createBrowserRouter([
   {
@@ -20,8 +18,6 @@ export const router = createBrowserRouter([
       { path: "changelog", Component: ChangelogPage },
       { path: "watch-demo", Component: WatchDemoPage },
       { path: "get-started", Component: GetStartedPage },
-      { path: "checkout/success", Component: CheckoutSuccessPage },
-      { path: "checkout/cancel", Component: CheckoutCancelPage },
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },
