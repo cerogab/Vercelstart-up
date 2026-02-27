@@ -6,6 +6,7 @@ import { PricingPage } from "../pages/PricingPage";
 import { ChangelogPage } from "../pages/ChangelogPage";
 import { WatchDemoPage } from "../pages/WatchDemoPage";
 import { GetStartedPage } from "../pages/GetStartedPage";
+import { TermsOfServicePage } from "../pages/TermsOfServicePage";
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
       { path: "changelog", Component: ChangelogPage },
       { path: "watch-demo", Component: WatchDemoPage },
       { path: "get-started", Component: GetStartedPage },
+      { path: "terms-of-service", Component: TermsOfServicePage },
       { path: "*", element: <Navigate to="/" replace /> },
     ],
   },
