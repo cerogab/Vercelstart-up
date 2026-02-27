@@ -98,8 +98,6 @@ export function PricingSection() {
                   </li>
                 ))}
               </ul>
-
-              <Button className="w-full">Purchase</Button>
             </CardContent>
           </Card>
         </div>
