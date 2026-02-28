@@ -25,6 +25,12 @@ export function GetStartedPage() {
     setIsLoading(true);
     setError(null);
 
+    if (!supabase) {
+      setError("Service unavailable. Please try again later.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const { error: insertError } = await supabase
         .from("contacts")
