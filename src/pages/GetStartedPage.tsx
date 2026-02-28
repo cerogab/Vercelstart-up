@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { useNavigate } from "react-router";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Check } from "lucide-react";
+import { supabase } from "../lib/supabase";
 
 const perks = [
   "Up to 500 Custom Customers",
@@ -15,10 +16,37 @@ const perks = [
 export function GetStartedPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Sign up logic would go here
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const { error: insertError } = await supabase
+        .from("contacts")
+        .insert({ email, first_name: name });
+
+      if (insertError) throw insertError;
+
+      navigate("/thank-you");
+    } catch (err: unknown) {
+      if (
+        err &&
+        typeof err === "object" &&
+        "code" in err &&
+        (err as { code: string }).code === "23505"
+      ) {
+        setError("This email is already registered.");
+      } else {
+        setError(err instanceof Error ? err.message : "Something went wrong.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -50,9 +78,10 @@ export function GetStartedPage() {
           {/* Right */}
           <div className="rounded-2xl border bg-card p-8">
             <h2 className="text-2xl tracking-tight mb-6">Create your account</h2>
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="name">Full Name</Label>
+                <Label htmlFor="name">First Name</Label>
                 <Input
                   id="name"
                   placeholder=""
@@ -73,12 +102,17 @@ export function GetStartedPage() {
                 />
               </div>
 
+              {error && (
+                <p className="text-sm text-red-500">{error}</p>
+              )}
+
               <Button
                 type="submit"
                 className="w-full text-white hover:opacity-90 mt-2"
                 style={{ backgroundColor: "#e87400" }}
+                disabled={isLoading}
               >
-                Request a Account
+                {isLoading ? "Submitting…" : "Request a Account"}
               </Button>
             </form>
           </div>

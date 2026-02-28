@@ -1,15 +1,17 @@
--- Notes table (run in Supabase SQL editor)
+-- Contacts table (run in Supabase SQL editor)
 
-create table notes (
+create table contacts (
   id bigint primary key generated always as identity,
-  title text not null
+  email text not null unique,
+  first_name text not null,
+  created_at timestamptz default now()
 );
 
 -- Insert some sample data into the table
-insert into notes (title)
+insert into contacts (email, first_name)
 values
-  ('Today I created a Supabase project.'),
-  ('I added some data and queried it from Next.js.'),
-  ('It was awesome!');
+  ('diego@example.com', 'Diego'),
+  ('jane@example.com', 'Jane'),
+  ('alex@example.com', 'Alex');
 
-alter table notes enable row level security;
+alter table contacts enable row level security;
