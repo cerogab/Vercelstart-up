@@ -1,9 +1,32 @@
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Separator } from "./ui/separator";
 import { Link } from "react-router";
 
 export function Footer() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  const handleGetStarted = async () => {
+    if (!email) return;
+    setStatus("sending");
+
+    try {
+      const res = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "footer" }),
+      });
+
+      if (!res.ok) throw new Error();
+      setStatus("sent");
+      setEmail("");
+    } catch {
+      setStatus("error");
+    }
+  };
+
   return (
     <footer className="border-t bg-muted/50">
       <div className="container mx-auto px-4 py-16">
@@ -19,9 +42,19 @@ export function Footer() {
               <Input 
                 placeholder="Enter your email" 
                 className="max-w-xs"
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); setStatus("idle"); }}
               />
-              <Button>Get Started</Button>
+              <Button onClick={handleGetStarted} disabled={status === "sending"}>
+                {status === "sending" ? "Sending…" : status === "sent" ? "Sent!" : "Get Started"}
+              </Button>
             </div>
+            {status === "sent" && (
+              <p className="text-sm text-green-600 mt-2">Check your inbox — we'll be in touch!</p>
+            )}
+            {status === "error" && (
+              <p className="text-sm text-red-500 mt-2">Something went wrong. Please try again.</p>
+            )}
           </div>
           
           <div>

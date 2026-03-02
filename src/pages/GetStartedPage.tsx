@@ -32,6 +32,18 @@ export function GetStartedPage() {
 
       if (insertError) throw insertError;
 
+      // Send email notification via server-side API
+      const emailRes = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, source: "get-started" }),
+      });
+
+      if (!emailRes.ok) {
+        const { error: emailError } = await emailRes.json();
+        throw new Error(emailError || "Failed to send email");
+      }
+
       navigate("/thank-you");
     } catch (err: unknown) {
       if (
