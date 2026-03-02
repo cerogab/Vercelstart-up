@@ -1,19 +1,14 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY?.trim());
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req, res) {
   // Only allow POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, email, source } = req.body as {
-    name?: string;
-    email?: string;
-    source?: string; // "footer" | "get-started"
-  };
+  const { name, email, source } = req.body || {};
 
   if (!email) {
     return res.status(400).json({ error: "Email is required" });
@@ -49,7 +44,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     return res.status(200).json({ success: true });
-  } catch (error: unknown) {
+  } catch (error) {
     console.error("Email send error:", error);
     const message =
       error instanceof Error ? error.message : "Failed to send email";
