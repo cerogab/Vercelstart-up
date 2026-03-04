@@ -73,7 +73,7 @@ export function TermsOfServicePage() {
         <div style={{ textAlign: "left" }}>
           <div data-custom-class="body_text" style={{ lineHeight: 1.5 }}>
             We are Bram LLC. ("Company," "we," "us," "our"), a company registered
-            in Florida, United States at 12676 SW 145TH ST, Miami, FL 33186-5986.
+            in Florida, United States.
           </div>
           <br />
           <div data-custom-class="body_text" style={{ lineHeight: 1.5 }}>
@@ -105,8 +105,7 @@ export function TermsOfServicePage() {
             >
               bram0001@bramllc.app
             </a>
-            , or by mail to 12676 SW 145TH ST, Miami, FL 33186-5986, United
-            States.
+            .
           </div>
           <br />
           <div data-custom-class="body_text" style={{ lineHeight: 1.5 }}>
@@ -1060,12 +1059,6 @@ export function TermsOfServicePage() {
             Attn: Copyright Agent
           </div>
           <div data-custom-class="body_text" style={{ lineHeight: 1.5 }}>
-            12676 SW 145TH ST
-          </div>
-          <div data-custom-class="body_text" style={{ lineHeight: 1.5 }}>
-            Miami, FL 33186-5986
-          </div>
-          <div data-custom-class="body_text" style={{ lineHeight: 1.5 }}>
             United States
           </div>
           <div data-custom-class="body_text" style={{ lineHeight: 1.5 }}>
@@ -1489,12 +1482,6 @@ export function TermsOfServicePage() {
           <br />
           <div data-custom-class="body_text" style={{ lineHeight: 1.5 }}>
             <strong>Bram LLC.</strong>
-          </div>
-          <div data-custom-class="body_text" style={{ lineHeight: 1.5 }}>
-            <strong>12676 SW 145TH ST</strong>
-          </div>
-          <div data-custom-class="body_text" style={{ lineHeight: 1.5 }}>
-            <strong>Miami, FL 33186-5986</strong>
           </div>
           <div data-custom-class="body_text" style={{ lineHeight: 1.5 }}>
             <strong>United States</strong>
