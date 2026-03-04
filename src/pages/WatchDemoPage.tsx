@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Play } from "lucide-react";
 import { Button } from "../components/ui/button";
 
 export function WatchDemoPage() {
+  const [showComingSoon, setShowComingSoon] = useState(false);
+
   return (
     <section className="py-24">
       <div className="container mx-auto px-4 max-w-4xl text-center">
@@ -16,11 +19,15 @@ export function WatchDemoPage() {
           <button
             className="relative z-10 flex items-center justify-center w-20 h-20 rounded-full text-white shadow-xl transition-transform hover:scale-105"
             style={{ backgroundColor: "#e87400" }}
+            onClick={() => setShowComingSoon(true)}
           >
             <Play className="w-8 h-8 ml-1" fill="white" />
           </button>
           <p className="absolute bottom-6 text-sm text-muted-foreground">Demo video — 2 min</p>
         </div>
+        {showComingSoon && (
+          <p className="text-sm text-muted-foreground mt-4">Demo video coming soon — stay tuned!</p>
+        )}
 
       </div>
     </section>

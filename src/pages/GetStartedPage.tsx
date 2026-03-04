@@ -124,7 +124,7 @@ export function GetStartedPage() {
                 style={{ backgroundColor: "#e87400" }}
                 disabled={isLoading}
               >
-                {isLoading ? "Submitting…" : "Request a Account"}
+                {isLoading ? "Submitting…" : "Request an Account"}
               </Button>
             </form>
           </div>

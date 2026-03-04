@@ -9,7 +9,7 @@ export function ThankYouPage() {
             Requested your account
           </h1>
           <p className="text-muted-foreground text-sm">
-            Check your email{"\n"}requesting our service!
+            Check your email — we'll be in touch about requesting our service!
           </p>
           <div className="mt-2 flex flex-col items-center">
             <Sun className="!w-[80px] !h-[80px]" />

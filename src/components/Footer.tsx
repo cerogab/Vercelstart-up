@@ -36,10 +36,11 @@ export function Footer() {
               <span className="font-semibold">Bram App</span>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">
-              design built for business owners. All in one platform to secure marketing intelligently.
+              Design built for business owners. All in one platform to secure marketing intelligently.
             </p>
             <div className="flex flex-col sm:flex-row gap-2">
               <Input 
+                type="email"
                 placeholder="Enter your email" 
                 className="max-w-xs"
                 value={email}
