@@ -1,8 +1,10 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import Lottie from "lottie-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Check } from "lucide-react";
+import sliderIntroData from "../assets/slider-intro.json";
 
 const features = [
   "Up to 500 Custom Customers",
@@ -23,14 +25,42 @@ export function PricingSection() {
   const [months, setMonths] = useState(6);
   const [thumbX, setThumbX] = useState(0); // 0–1 continuous position for smooth tracking
   const [isDragging, setIsDragging] = useState(false);
+  const [introComplete, setIntroComplete] = useState(false);
+  const [introVisible, setIntroVisible] = useState(true); // controls Lottie visibility during crossfade
   const trackRef = useRef<HTMLDivElement>(null);
   const animFrameRef = useRef<number>(0);
   const targetXRef = useRef(0);
   const currentXRef = useRef(0);
+  const sectionRef = useRef<HTMLElement>(null);
+  const hasPlayedRef = useRef(false);
 
   const monthlyPrice = pricePerMonth[months];
   const totalPrice = (monthlyPrice * months).toFixed(2);
   const sliderIndex = frequencyOptions.indexOf(months);
+
+  // Trigger intro when section scrolls into view
+  const [shouldPlay, setShouldPlay] = useState(false);
+  useEffect(() => {
+    if (hasPlayedRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasPlayedRef.current) {
+          hasPlayedRef.current = true;
+          setShouldPlay(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // When Lottie animation finishes, crossfade to the interactive slider
+  const handleIntroComplete = useCallback(() => {
+    setIntroComplete(true);
+    // Delay hiding Lottie to allow crossfade
+    setTimeout(() => setIntroVisible(false), 500);
+  }, []);
 
   // Smooth lerp animation loop — eases thumb toward target during drag
   const startLerp = useCallback(() => {
@@ -107,7 +137,7 @@ export function PricingSection() {
   }, [isDragging, ratioFromClientX, snapToNearest]);
 
   return (
-    <section id="pricing" className="py-20">
+    <section id="pricing" className="py-20" ref={sectionRef}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl lg:text-5xl tracking-tight mb-4">
@@ -142,38 +172,72 @@ export function PricingSection() {
                     {months === 1 ? "Monthly" : `Every ${months} months`}
                   </span>
                 </div>
-                {/* Custom smooth track */}
-                <div
-                  ref={trackRef}
-                  className="relative h-6 flex items-center select-none touch-none cursor-pointer"
-                  onPointerDown={handlePointerDown}
-                  onPointerMove={handlePointerMove}
-                  onPointerUp={handlePointerUp}
-                  onPointerCancel={handlePointerUp}
-                >
-                  {/* Rail */}
-                  <div className="absolute inset-x-0 h-2 rounded-full bg-gray-200 overflow-hidden">
-                    {/* Filled portion */}
+
+                {/* Slider area — relative container for layering intro + interactive */}
+                <div className="relative" style={{ minHeight: 32 }}>
+                  {/* Lottie intro animation */}
+                  {introVisible && (
                     <div
-                      className="h-full rounded-full"
+                      className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
                       style={{
-                        width: `${thumbX * 100}%`,
-                        background: "#e87400",
-                        transition: isDragging ? "none" : "width 0.6s cubic-bezier(.25,.1,.25,1)",
+                        opacity: introComplete ? 0 : 1,
+                        transition: "opacity 0.5s ease-out",
                       }}
-                    />
-                  </div>
-                  {/* Thumb */}
+                    >
+                      {shouldPlay && (
+                        <Lottie
+                          animationData={sliderIntroData}
+                          loop={false}
+                          autoplay
+                          onComplete={handleIntroComplete}
+                          style={{ width: "100%", height: "auto", maxHeight: 48 }}
+                        />
+                      )}
+                    </div>
+                  )}
+
+                  {/* Interactive slider — fades in after intro */}
                   <div
-                    className="absolute -translate-x-1/2"
                     style={{
-                      left: `${thumbX * 100}%`,
-                      transition: isDragging ? "none" : "left 0.6s cubic-bezier(.25,.1,.25,1)",
+                      opacity: introComplete ? 1 : 0,
+                      transition: "opacity 0.5s ease-in",
+                      pointerEvents: introComplete ? "auto" : "none",
                     }}
                   >
-                    <div className="w-[18px] h-[18px] rounded-full bg-[#e87400] border-2 border-white shadow-[0_0_0_2px_#e87400] hover:scale-110 transition-transform" />
+                    <div
+                      ref={trackRef}
+                      className="relative h-6 flex items-center select-none touch-none cursor-pointer"
+                      onPointerDown={handlePointerDown}
+                      onPointerMove={handlePointerMove}
+                      onPointerUp={handlePointerUp}
+                      onPointerCancel={handlePointerUp}
+                    >
+                      {/* Rail */}
+                      <div className="absolute inset-x-0 h-2 rounded-full bg-gray-200 overflow-hidden">
+                        {/* Filled portion */}
+                        <div
+                          className="h-full rounded-full"
+                          style={{
+                            width: `${thumbX * 100}%`,
+                            background: "#e87400",
+                            transition: isDragging ? "none" : "width 0.6s cubic-bezier(.25,.1,.25,1)",
+                          }}
+                        />
+                      </div>
+                      {/* Thumb */}
+                      <div
+                        className="absolute -translate-x-1/2"
+                        style={{
+                          left: `${thumbX * 100}%`,
+                          transition: isDragging ? "none" : "left 0.6s cubic-bezier(.25,.1,.25,1)",
+                        }}
+                      >
+                        <div className="w-[18px] h-[18px] rounded-full bg-[#e87400] border-2 border-white shadow-[0_0_0_2px_#e87400] hover:scale-110 transition-transform" />
+                      </div>
+                    </div>
                   </div>
                 </div>
+
                 <div className="flex justify-between mt-1.5">
                   {["6mo", "12mo"].map((label, i) => (
                     <span
