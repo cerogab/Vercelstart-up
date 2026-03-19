@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Badge } from "./ui/badge";
 import { Check } from "lucide-react";
 
 const features = [
@@ -40,10 +39,6 @@ export function PricingSection() {
 
         <div className="max-w-2xl mx-auto">
           <Card className="relative border-primary shadow-lg shadow-primary/10">
-            <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
-              Most Popular
-            </Badge>
-
             <CardHeader className="text-center pb-6">
               <CardTitle className="text-xl mb-2">Starter PRO</CardTitle>
               <div className="mb-1 flex items-end justify-center gap-1">
