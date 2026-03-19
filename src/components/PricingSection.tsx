@@ -40,7 +40,7 @@ export function PricingSection() {
     if (!isAutoPlaying) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % screenshots.length);
-    }, 3500);
+    }, 10500);
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
 
