@@ -31,7 +31,7 @@ export function HeroSection() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal tracking-tight">
             Ingredients to complement customer —{" "}
             <br className="hidden md:block" />
-            all in one place advanced features to connect.
+            all in one place to advance connection.
           </h2>
         </div>
       </div>
