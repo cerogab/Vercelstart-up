@@ -1,12 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 import { Play, Pause, Volume2, VolumeX, SkipBack, SkipForward } from "lucide-react";
 
+const APP_SCREENSHOTS = [
+  { src: "/home-page.jpg", label: "Home" },
+  { src: "/settings.png", label: "Settings" },
+  { src: "/cal.png", label: "Annual Calculator" },
+];
+
+const SLIDE_INTERVAL = 3500; // ms each screenshot shows while playing
+
 function FlashPlayerScreen() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [slideIndex, setSlideIndex] = useState(0);
   const [volume, setVolume] = useState(70);
   const [muted, setMuted] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const slideRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const duration = 120; // 2 min demo
 
@@ -21,11 +31,16 @@ function FlashPlayerScreen() {
           return Math.min(p + 100 / duration / 10, 100);
         });
       }, 100);
+      slideRef.current = setInterval(() => {
+        setSlideIndex((i) => (i + 1) % APP_SCREENSHOTS.length);
+      }, SLIDE_INTERVAL);
     } else {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      if (slideRef.current) clearInterval(slideRef.current);
     }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
+      if (slideRef.current) clearInterval(slideRef.current);
     };
   }, [isPlaying]);
 
@@ -54,12 +69,26 @@ function FlashPlayerScreen() {
         <span className="text-xs font-semibold tracking-wide">Bram Player</span>
       </div>
 
-      {/* Video frame */}
+      {/* Video frame — app preview screenshots */}
       <div
         className="mx-3 mt-3 rounded-xl overflow-hidden bg-black relative shrink-0"
         style={{ aspectRatio: "16/9" }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-900/30 via-gray-900 to-black flex items-center justify-center">
+        {/* Screenshot slides */}
+        {APP_SCREENSHOTS.map((shot, i) => (
+          <img
+            key={shot.src}
+            src={shot.src}
+            alt={shot.label}
+            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
+            style={{ opacity: i === slideIndex ? 1 : 0 }}
+          />
+        ))}
+        {/* Overlay: dark tint + play button */}
+        <div
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ background: "rgba(0,0,0,0.28)" }}
+        >
           <button
             onClick={() => setIsPlaying((p) => !p)}
             className="w-12 h-12 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center transition-all hover:bg-orange-500/80 hover:scale-105 hover:border-orange-400"
@@ -70,6 +99,21 @@ function FlashPlayerScreen() {
               <Play className="w-4 h-4 fill-white text-white ml-0.5" />
             )}
           </button>
+        </div>
+        {/* Screen label */}
+        <div className="absolute top-2 left-2 bg-black/50 backdrop-blur-sm rounded-md px-1.5 py-0.5">
+          <span className="text-[8px] text-white/80 font-medium">{APP_SCREENSHOTS[slideIndex].label}</span>
+        </div>
+        {/* Dot indicators */}
+        <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1">
+          {APP_SCREENSHOTS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setSlideIndex(i)}
+              className="w-1 h-1 rounded-full transition-all"
+              style={{ background: i === slideIndex ? "#e87400" : "rgba(255,255,255,0.4)" }}
+            />
+          ))}
         </div>
         {/* Progress bar at bottom of video */}
         <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/15">
