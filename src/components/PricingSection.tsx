@@ -25,7 +25,7 @@ const screenshots = [
     gradient: "from-[#f29b0f]/20 to-[#f29b0f]/5",
   },
   {
-    title: "Calendar",
+    title: "Annual Calculator",
     description: "Stay organized with your schedule",
     image: "/cal.png",
     gradient: "from-primary/15 to-[#f29b0f]/10",
@@ -60,7 +60,7 @@ export function PricingSection() {
             Preview
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
-            Choose the plan that fits your team size and needs. Start free and scale as you grow.
+            Choose to start free and scale as you grow.
           </p>
         </div>
 

@@ -25,9 +25,6 @@ export function HeroSection() {
         
         {/* Feature highlight */}
         <div className="mx-auto max-w-4xl">
-          <p className="text-sm font-medium tracking-widest uppercase text-muted-foreground mb-6">
-            Built for what matters most
-          </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal tracking-tight">
             Ingredients to complement customer —{" "}
             <br className="hidden md:block" />

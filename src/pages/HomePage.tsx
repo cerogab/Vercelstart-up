@@ -6,6 +6,9 @@ export function HomePage() {
     <>
       <HeroSection />
       <div className="py-16 md:py-24" />
+      <div className="py-16 md:py-24" />
+      <div className="py-16 md:py-24" />
+      <div className="py-16 md:py-24" />
       <PricingSection />
     </>
   );
