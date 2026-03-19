@@ -25,7 +25,7 @@ export function HeroSection() {
         
         {/* Feature highlight */}
         <div className="mx-auto max-w-4xl">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal tracking-tight">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl tracking-tight">
             Ingredients to complement customer —{" "}
             <br className="hidden md:block" />
             all in one place to advance connection.
