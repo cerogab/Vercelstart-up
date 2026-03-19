@@ -14,9 +14,6 @@ export function Header() {
             <Link to="/watch-demo" className="text-muted-foreground hover:text-foreground transition-colors">
               Watch Demo
             </Link>
-            <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-              Pricing
-            </Link>
           </nav>
         </div>
         <div className="flex items-center space-x-4">

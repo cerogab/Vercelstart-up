@@ -1,6 +1,5 @@
 import { Button } from "./ui/button";
 import { ArrowRight, Play } from "lucide-react";
-import { Sun } from "./Sun";
 
 export function HeroSection() {
   return (
@@ -20,13 +19,20 @@ export function HeroSection() {
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
           <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground">
-            Starter PRO
+            Start with the demo
           </Button>
         </div>
         
-        {/* Sun */}
-        <div className="flex items-center justify-center">
-          <Sun />
+        {/* Feature highlight */}
+        <div className="mx-auto max-w-4xl">
+          <p className="text-sm font-medium tracking-widest uppercase text-muted-foreground mb-6">
+            Built for what matters most
+          </p>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal tracking-tight">
+            Ingredients to complement customer —{" "}
+            <br className="hidden md:block" />
+            all in one place advanced features to connect.
+          </h2>
         </div>
       </div>
     </section>
