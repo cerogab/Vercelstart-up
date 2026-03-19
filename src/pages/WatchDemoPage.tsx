@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { Play, Pause, SkipBack, SkipForward } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
 
 const SLIDES = [
   { src: "/home-page.jpg", label: "Home Page" },
@@ -11,9 +11,56 @@ export function WatchDemoPage() {
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [slide, setSlide] = useState(0);
+  const [vol, setVol] = useState(60);
+  const [muted, setMuted] = useState(false);
   const tickRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const swapRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const gainRef = useRef<GainNode | null>(null);
   const duration = 120;
+
+  // Ambient audio — warm pad tone
+  const ensureAudio = useCallback(() => {
+    if (audioCtxRef.current) return;
+    const ctx = new AudioContext();
+    const gain = ctx.createGain();
+    gain.gain.value = (vol / 100) * 0.15;
+    gain.connect(ctx.destination);
+
+    // Warm chord: three detuned oscillators
+    [261.6, 329.6, 392.0].forEach((freq) => {
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      osc.connect(gain);
+      osc.start();
+    });
+
+    audioCtxRef.current = ctx;
+    gainRef.current = gain;
+  }, [vol]);
+
+  // Sync volume
+  useEffect(() => {
+    if (gainRef.current) {
+      gainRef.current.gain.value = muted ? 0 : (vol / 100) * 0.15;
+    }
+  }, [vol, muted]);
+
+  // Play / suspend audio context with player state
+  useEffect(() => {
+    if (playing) {
+      ensureAudio();
+      audioCtxRef.current?.resume();
+    } else {
+      audioCtxRef.current?.suspend();
+    }
+  }, [playing, ensureAudio]);
+
+  // Cleanup
+  useEffect(() => {
+    return () => { audioCtxRef.current?.close(); };
+  }, []);
 
   useEffect(() => {
     if (playing) {
@@ -115,6 +162,19 @@ export function WatchDemoPage() {
             </div>
 
             <span className="text-xs text-white/50 font-mono">{mm}:{ss} / 02:00</span>
+
+            {/* Volume */}
+            <div className="flex items-center gap-2">
+              <button onClick={() => setMuted((m) => !m)} className="text-white/60 hover:text-white transition-colors">
+                {muted || vol === 0 ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+              </button>
+              <input
+                type="range" min={0} max={100}
+                value={muted ? 0 : vol}
+                onChange={(e) => { setVol(Number(e.target.value)); setMuted(false); }}
+                className="w-16 h-1 cursor-pointer accent-orange-500"
+              />
+            </div>
 
             {/* Dot navigation */}
             <div className="flex items-center gap-1.5">
